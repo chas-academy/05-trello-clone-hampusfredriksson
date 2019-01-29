@@ -10,7 +10,7 @@ import '../css/styles.css';
 
 // Här tillämpar vi mönstret reavealing module pattern:
 // Mer information om det mönstret här: https://bit.ly/1nt5vXP
-const jtrello = (function() {
+const jtrello = (function () {
   "use strict"; // https://lucybain.com/blog/2014/js-use-strict/
 
   // Referens internt i modulen för DOM element
@@ -23,7 +23,7 @@ const jtrello = (function() {
     DOM.$columns = $('.column');
     DOM.$lists = $('.list');
     DOM.$cards = $('.card');
-    
+
     DOM.$newListButton = $('button#new-list');
     DOM.$deleteListButton = $('.list-header > button.delete');
 
@@ -31,8 +31,8 @@ const jtrello = (function() {
     DOM.$deleteCardButton = $('.card > button.delete');
   }
 
-  function createTabs() {}
-  function createDialogs() {}
+  function createTabs() { }
+  function createDialogs() { }
 
   /*
   *  Denna metod kommer nyttja variabeln DOM för att binda eventlyssnare till
@@ -55,7 +55,6 @@ const jtrello = (function() {
   function deleteList() {
     console.log("This should delete the list you clicked on");
   }
-
   /* =========== Metoder för att hantera kort i listor nedan =========== */
   function createCard(event) {
     event.preventDefault();
@@ -64,10 +63,11 @@ const jtrello = (function() {
 
   function deleteCard() {
     console.log("This should delete the card you clicked on");
-  }
+    $(this).parent().remove();
+  };
 
   // Metod för att rita ut element i DOM:en
-  function render() {}
+  function render() { }
 
   /* =================== Publika metoder nedan ================== */
 
@@ -89,6 +89,6 @@ const jtrello = (function() {
 })();
 
 //usage
-$("document").ready(function() {
+$("document").ready(function () {
   jtrello.init();
 });
