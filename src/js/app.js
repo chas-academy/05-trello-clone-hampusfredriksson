@@ -54,12 +54,14 @@ const jtrello = (function () {
 
   function deleteList() {
     console.log("This should delete the list you clicked on");
+    $(this).closest('.column').remove();
   }
   /* =========== Metoder för att hantera kort i listor nedan =========== */
   function createCard(event) {
     event.preventDefault();
     console.log("This should create a new card");
-  }
+    $(this).after();
+  };
 
   function deleteCard() {
     console.log("This should delete the card you clicked on");
