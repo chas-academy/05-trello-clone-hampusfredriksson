@@ -59,10 +59,11 @@ const jtrello = (function () {
   /* =========== Metoder för att hantera kort i listor nedan =========== */
   function createCard(event) {
     event.preventDefault();
+    let addText = $('input[name=title]').val();
+    $('.add-new').before('<li class="card">' + addText + '<button class="button delete">X</button></li>');
     console.log("This should create a new card");
-    $(this).after();
-  };
 
+  };
   function deleteCard() {
     console.log("This should delete the card you clicked on");
     $(this).parent().remove();
