@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import dialog from 'jquery-ui/ui/widgets/dialog';
 import tabs from 'jquery-ui/ui/widgets/tabs';
+import sortable from 'jquery-ui/ui/widgets/sortable';
 
 import 'jquery-ui/themes/base/all.css';
 
@@ -13,7 +14,7 @@ import '../css/styles.css';
 
 // Här tillämpar vi mönstret reavealing module pattern:
 // Mer information om det mönstret här: https://bit.ly/1nt5vXP
-const jtrello = (function ($, dialog, tabs) {
+const jtrello = (function ($, dialog, tabs, sortable) {
   "use strict"; // https://lucybain.com/blog/2014/js-use-strict/
 
   // Referens internt i modulen för DOM element
@@ -58,7 +59,15 @@ const jtrello = (function ($, dialog, tabs) {
   function createList() {
     event.preventDefault();
     console.log("This should create a new list");
-    dialog("open", DOM.$listDialog);
+    //dialog("open", DOM.$listDialog);
+
+    $(this)
+      .parent()
+      .prev()
+      .before('<div class="column"><div class="list"><div class="list-header">Check<button class="button delete">X</button></div><ul class="list-cards"><li class="card">#Card<button class="button delete">X</button></li><li class="add-new"><form class="new-card" action="index.html"><input type="text" name="title" placeholder="Please name the card"/><button class="button add">Add new card</button>');
+    //  parent before div class column div class list div class list header
+    // Lägg till column före knappen (parent) för att skapa en ny lista efter där add ligger
+
   }
 
   function deleteList() {
@@ -77,23 +86,21 @@ const jtrello = (function ($, dialog, tabs) {
     $(this)
       .closest('.add-new')
       .before('<li class="card">' + newCardTitle + '<button class="button delete">X</button></li>');
-
     $(this)
       .parent()
       .prev()
       .find('button.delete')
       .click(deleteCard)
-    sortCard();
 
     cardInput.val(""); // töm inmatningsfält efter skapat kort
   };
+  function createSortable() {
 
-  function sortCard() {
+    $('.list-cards').sortable({ connectWith: '.list-cards' });
+    $('.list-cards').disableSelection({ connectWith: '.list-cards' });
 
-    $(".card").sortable({
-      appendTo: document.body
-    });
-
+    $('.column').sortable({ connectWith: '.column' });
+    $('.column').disableSelection({ connectWith: '.column' });
 
   };
 
@@ -114,15 +121,15 @@ const jtrello = (function ($, dialog, tabs) {
     captureDOMEls();
     createTabs();
     createDialogs();
-    sortCard();
     bindEvents();
+    createSortable();
   }
 
   // All kod här
   return {
     init: init
   };
-})($, dialog, tabs);
+})($, dialog, tabs, sortable);
 
 //usage
 $("document").ready(function () {
