@@ -5,8 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
     <title>jQuery UI - Trello Clone (yay!)</title>
-<link href="./css/index.b9953bcd16bad3c876c3.css" rel="stylesheet"></head>
+</head>
 
 <body>
     <div class="board">
@@ -78,7 +80,25 @@
     <div id="list-creation-dialog" title="Create new list" style="height: 40px">
         <form>
             <input type="text" name="title" placeholder="List title" />
+            <button class="button">Save</button>
         </form>
+    </div>
+
+    <div id="tabs">
+        <ul>
+            <li><a href="#fragment-1">One</a></li>
+            <li><a href="#fragment-2">Two</a></li>
+            <li><a href="#fragment-3">Three</a></li>
+        </ul>
+        <div id="fragment-1">
+            Tab 1
+        </div>
+        <div id="fragment-2">
+            Tab 2
+        </div>
+        <div id="fragment-3">
+            Tab 3
+        </div>
     </div>
 <script type="text/javascript" src="./bundle.js"></script></body>
 
