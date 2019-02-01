@@ -3,6 +3,7 @@ import dialog from 'jquery-ui/ui/widgets/dialog';
 import tabs from 'jquery-ui/ui/widgets/tabs';
 import sortable from 'jquery-ui/ui/widgets/sortable';
 import datepicker from 'jquery-ui/ui/widgets/datepicker';
+import slideToggle from 'jquery-ui/ui/widgets/slider';
 
 import 'jquery-ui/themes/base/all.css';
 
@@ -15,7 +16,7 @@ import '../css/styles.css';
 
 // Här tillämpar vi mönstret reavealing module pattern:
 // Mer information om det mönstret här: https://bit.ly/1nt5vXP
-const jtrello = (function ($, dialog, tabs, sortable) {
+const jtrello = (function ($, dialog, tabs, sortable, datepicker, slideToggle) {
   "use strict"; // https://lucybain.com/blog/2014/js-use-strict/
 
   // Referens internt i modulen för DOM element
@@ -51,10 +52,11 @@ const jtrello = (function ($, dialog, tabs, sortable) {
   */
   function bindEvents() {
     DOM.$newListButton.on('click', createList);
-    // DOM.$deleteListButton.on('click', deleteList);
     DOM.$board.on('click', '.list-header > button.delete', deleteList);
-    DOM.$newCardForm.on('submit', createCard);
-    DOM.$deleteCardButton.on('click', deleteCard);
+    DOM.$board.on('submit', 'form.new-card', createCard);
+    DOM.$board.on('click', '.card > button.delete', deleteCard);
+
+
   }
 
   /* ============== Metoder för att hantera listor nedan ============== */
@@ -69,7 +71,7 @@ const jtrello = (function ($, dialog, tabs, sortable) {
       .before(`<div class="column ui-sortable">
         <div class="list ui-sortable-handle">
             <div class="list-header">
-            <p>Date: <input type="text" id="datepicker"></p>
+            <p>Date: <input type="text" class="datepicker"></p>
                 Done
                 <button class="button delete">X</button>
             </div>
@@ -95,10 +97,13 @@ const jtrello = (function ($, dialog, tabs, sortable) {
 
   function deleteList() {
     console.log("This should delete the list you clicked on");
-    $(this).closest('.column').remove();
-  }
+    $(this).closest('.column').remove()
+
+
+
+  };
   /* =========== Metoder för att hantera kort i listor nedan =========== */
-  function createCard(event) {
+  function createCard() {
     event.preventDefault();
 
     let cardInput = $(this).find('input');
@@ -113,7 +118,7 @@ const jtrello = (function ($, dialog, tabs, sortable) {
       .parent()
       .prev()
       .find('button.delete')
-      .click(deleteCard)
+      .click(deleteCard).slideToggle();
 
     cardInput.val(""); // töm inmatningsfält efter skapat kort
   };
@@ -129,14 +134,38 @@ const jtrello = (function ($, dialog, tabs, sortable) {
 
   function deleteCard() {
     console.log("This should delete the card you clicked on");
-    $(this).parent().remove();
+    $(this).parent().remove().slideToggle();
   };
 
+
+  // $( function() {
+  //   // run the currently selected effect
+  //   function runEffect() {
+  //     // get effect type from
+  //     var selectedEffect = $( "#effectTypes" ).val();
+
+  //     // Most effect types need no options passed by default
+  //     var options = {};
+  //     // some effects have required parameters
+  //     if ( selectedEffect === "scale" ) {
+  //       options = { percent: 50 };
+  //     } else if ( selectedEffect === "transfer" ) {
+  //       options = { to: "#button", className: "ui-effects-transfer" };
+  //     } else if ( selectedEffect === "size" ) {
+  //       options = { to: { width: 200, height: 60 } };
+  //     }
+
+  //     // Run the effect
+  //     $( ".card" ).effect( selectedEffect, options, 500, callback );
+  //   };
+  // 
+  // function datepicker() {
+  //   $(".datepicker").datepicker('option', 'all')
+  // };
 
   function datepicker() {
-    $(".datepicker").datepicker()
+    $(".datepicker").datepicker();
   };
-
 
   // Metod för att rita ut element i DOM:en
   function render() { }
@@ -159,7 +188,7 @@ const jtrello = (function ($, dialog, tabs, sortable) {
   return {
     init: init
   };
-})($, dialog, tabs, sortable, datepicker);
+})($, dialog, tabs, sortable, datepicker, slideToggle);
 
 //usage
 $("document").ready(function () {
