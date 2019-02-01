@@ -2,6 +2,7 @@ import $ from 'jquery';
 import dialog from 'jquery-ui/ui/widgets/dialog';
 import tabs from 'jquery-ui/ui/widgets/tabs';
 import sortable from 'jquery-ui/ui/widgets/sortable';
+import datepicker from 'jquery-ui/ui/widgets/datepicker';
 
 import 'jquery-ui/themes/base/all.css';
 
@@ -50,7 +51,8 @@ const jtrello = (function ($, dialog, tabs, sortable) {
   */
   function bindEvents() {
     DOM.$newListButton.on('click', createList);
-    DOM.$deleteListButton.on('click', deleteList);
+    // DOM.$deleteListButton.on('click', deleteList);
+    DOM.$board.on('click', '.list-header > button.delete', deleteList);
     DOM.$newCardForm.on('submit', createCard);
     DOM.$deleteCardButton.on('click', deleteCard);
   }
@@ -58,15 +60,36 @@ const jtrello = (function ($, dialog, tabs, sortable) {
   /* ============== Metoder för att hantera listor nedan ============== */
   function createList() {
     event.preventDefault();
-    console.log("This should create a new list");
-    //dialog("open", DOM.$listDialog);
+    // let createList = $('.column-1').clone(true, true);
+    // $(createList).prependTo('.board');
+
 
     $(this)
       .parent()
-      .prev()
-      .before('<div class="column"><div class="list"><div class="list-header">Check<button class="button delete">X</button></div><ul class="list-cards"><li class="card">#Card<button class="button delete">X</button></li><li class="add-new"><form class="new-card" action="index.html"><input type="text" name="title" placeholder="Please name the card"/><button class="button add">Add new card</button>');
-    //  parent before div class column div class list div class list header
-    // Lägg till column före knappen (parent) för att skapa en ny lista efter där add ligger
+      .before(`<div class="column ui-sortable">
+        <div class="list ui-sortable-handle">
+            <div class="list-header">
+            <p>Date: <input type="text" id="datepicker"></p>
+                Done
+                <button class="button delete">X</button>
+            </div>
+            <ul class="list-cards ui-sortable">
+                <li class="card">
+                    Card #3
+                    <button class="button delete">X</button>
+                </li>
+                <li class="add-new">
+                    <form class="new-card" action="index.html">
+                        <input type="text" name="title" placeholder="Please name the card">
+                        <button class="button add">Add new card</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>`)
+    createSortable();
+    createCard();
+    datepicker();
 
   }
 
@@ -78,13 +101,13 @@ const jtrello = (function ($, dialog, tabs, sortable) {
   function createCard(event) {
     event.preventDefault();
 
-    let cardInput = $(this).find('input[name=title]');
+    let cardInput = $(this).find('input');
     let newCardTitle = cardInput.val();
 
-    if (!newCardTitle) return; // show error eller något
+    // if (!newCardTitle) return; // show error eller något
 
     $(this)
-      .closest('.add-new')
+      .parent()
       .before('<li class="card">' + newCardTitle + '<button class="button delete">X</button></li>');
     $(this)
       .parent()
@@ -97,10 +120,10 @@ const jtrello = (function ($, dialog, tabs, sortable) {
   function createSortable() {
 
     $('.list-cards').sortable({ connectWith: '.list-cards' });
-    $('.list-cards').disableSelection({ connectWith: '.list-cards' });
+    // $('.list-cards').disableSelection({ connectWith: '.list-cards' });
 
-    $('.column').sortable({ connectWith: '.column' });
-    $('.column').disableSelection({ connectWith: '.column' });
+    $('.board').sortable({ connectWith: '.board', axis: 'x' });
+    // $('.column').disableSelection({ connectWith: '.column' });
 
   };
 
@@ -108,6 +131,12 @@ const jtrello = (function ($, dialog, tabs, sortable) {
     console.log("This should delete the card you clicked on");
     $(this).parent().remove();
   };
+
+
+  function datepicker() {
+    $(".datepicker").datepicker()
+  };
+
 
   // Metod för att rita ut element i DOM:en
   function render() { }
@@ -123,13 +152,14 @@ const jtrello = (function ($, dialog, tabs, sortable) {
     createDialogs();
     bindEvents();
     createSortable();
+    datepicker();
   }
 
   // All kod här
   return {
     init: init
   };
-})($, dialog, tabs, sortable);
+})($, dialog, tabs, sortable, datepicker);
 
 //usage
 $("document").ready(function () {
