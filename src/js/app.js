@@ -77,7 +77,7 @@ const jtrello = (function ($, dialog, tabs, sortable, datepicker, slideToggle) {
             </div>
             <ul class="list-cards ui-sortable">
                 <li class="card">
-                    Card #3
+                    New Card
                     <button class="button delete">X</button>
                 </li>
                 <li class="add-new">
@@ -89,18 +89,21 @@ const jtrello = (function ($, dialog, tabs, sortable, datepicker, slideToggle) {
             </ul>
         </div>
     </div>`)
+
     createSortable();
     createCard();
     datepicker();
+
+    // $(this).closest('list').slideDown(500, function () {
+    // })
 
   }
 
   function deleteList() {
     console.log("This should delete the list you clicked on");
-    $(this).closest('.column').remove()
-
-
-
+    $(this).closest('.column').slideUp(500, function () {
+      $(this).closest('.column').remove()
+    })
   };
   /* =========== Metoder för att hantera kort i listor nedan =========== */
   function createCard() {
@@ -118,7 +121,7 @@ const jtrello = (function ($, dialog, tabs, sortable, datepicker, slideToggle) {
       .parent()
       .prev()
       .find('button.delete')
-      .click(deleteCard).slideToggle();
+      .click(deleteCard);
 
     cardInput.val(""); // töm inmatningsfält efter skapat kort
   };
@@ -134,9 +137,27 @@ const jtrello = (function ($, dialog, tabs, sortable, datepicker, slideToggle) {
 
   function deleteCard() {
     console.log("This should delete the card you clicked on");
-    $(this).parent().remove().slideToggle();
-  };
+    $(this).closest('.card').slideUp(100, function () {
 
+      $(this).closest('.card').remove()
+
+    })
+
+  };
+  // $(this).parent().remove().slideToggle();
+
+
+
+  // $('.list').dialog({
+  //   autoOpen: false,
+  //   show: {
+  //     effect: "blind",
+  //     duration: 300
+  //   },
+  //   hide: {
+  //     effect: "explode",
+  //     duration: 1200
+  //   },
 
   // $( function() {
   //   // run the currently selected effect
