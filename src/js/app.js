@@ -30,12 +30,13 @@ const jtrello = (function ($, dialog, tabs, sortable, datepicker, slideToggle) {
     DOM.$columns = $('.column');
     DOM.$lists = $('.list');
     DOM.$cards = $('.card');
-
+    DOM.$body = $("body");
+    DOM.$cardDialog = $(".card-creation-dialog")
     DOM.$newListButton = $('button#new-list');
     DOM.$deleteListButton = $('.list-header > button.delete');
-
     DOM.$newCardForm = $('form.new-card');
     DOM.$deleteCardButton = $('.card > button.delete');
+    DOM.$newDialog = $('form.dialog-form');
   }
 
   function createTabs() {
@@ -43,7 +44,9 @@ const jtrello = (function ($, dialog, tabs, sortable, datepicker, slideToggle) {
   }
 
   function createDialogs() {
-    dialog({ autoOpen: false }, DOM.$listDialog);
+    DOM.$listDialog.dialog({
+      autoOpen: false,
+    });
   }
 
   /*
@@ -51,33 +54,46 @@ const jtrello = (function ($, dialog, tabs, sortable, datepicker, slideToggle) {
   *  createList, deleteList, createCard och deleteCard etc.
   */
   function bindEvents() {
-    DOM.$newListButton.on('click', createList);
+    DOM.$newListButton.on('click', toggleDialog);
     DOM.$board.on('click', '.list-header > button.delete', deleteList);
     DOM.$board.on('submit', 'form.new-card', createCard);
     DOM.$board.on('click', '.card > button.delete', deleteCard);
+    DOM.$newDialog.on("submit", createList);
+    DOM.$listDialog.on("click", "form.new.card", createCard);
+
 
 
   }
 
+  function toggleDialog() {
+    $("#list-creation-dialog").dialog("open");
+    $('#list-creation-dialog input.datepicker').datepicker()
+  };
+
   /* ============== Metoder för att hantera listor nedan ============== */
   function createList() {
     event.preventDefault();
-    // let createList = $('.column-1').clone(true, true);
-    // $(createList).prependTo('.board');
+    let listTitle = $("input[name='list-title']").val();
+    let listDate = $("input[name='date']").val();
+    console.log(listTitle, listDate)
+
+    $('#list-creation-dialog').dialog("close");
 
 
-    $(this)
-      .parent()
-      .before(`<div class="column ui-sortable">
-        <div class="list ui-sortable-handle">
-            <div class="list-header">
-            <p>Date: <input type="text" class="datepicker"></p>
-                Done
+
+    let counter = 3
+    // $(this).first('.column: last')
+    // .before
+
+    DOM.$board.prepend(`<div class="column ui-sortable">
+    <div class="list ui-sortable-handle">
+    <div class="list-header">
+            ${listTitle} | <small>${listDate}</small>
                 <button class="button delete">X</button>
-            </div>
+                </div>
             <ul class="list-cards ui-sortable">
                 <li class="card">
-                    New Card
+                Card #${counter++}
                     <button class="button delete">X</button>
                 </li>
                 <li class="add-new">
@@ -85,25 +101,22 @@ const jtrello = (function ($, dialog, tabs, sortable, datepicker, slideToggle) {
                         <input type="text" name="title" placeholder="Please name the card">
                         <button class="button add">Add new card</button>
                     </form>
-                </li>
-            </ul>
+                    </li>
+                    </ul>
         </div>
-    </div>`)
-
+        </div>`);
     createSortable();
-    createCard();
-    datepicker();
+    // createCard();
 
     // $(this).closest('list').slideDown(500, function () {
     // })
+
 
   }
 
   function deleteList() {
     console.log("This should delete the list you clicked on");
-    $(this).closest('.column').slideUp(500, function () {
-      $(this).closest('.column').remove()
-    })
+    $(this).closest('.column').slideUp(500)
   };
   /* =========== Metoder för att hantera kort i listor nedan =========== */
   function createCard() {
@@ -112,7 +125,6 @@ const jtrello = (function ($, dialog, tabs, sortable, datepicker, slideToggle) {
     let cardInput = $(this).find('input');
     let newCardTitle = cardInput.val();
 
-    // if (!newCardTitle) return; // show error eller något
 
     $(this)
       .parent()
@@ -137,52 +149,13 @@ const jtrello = (function ($, dialog, tabs, sortable, datepicker, slideToggle) {
 
   function deleteCard() {
     console.log("This should delete the card you clicked on");
-    $(this).closest('.card').slideUp(100, function () {
+    $(this).closest('.card').slideUp(300, function () {
 
       $(this).closest('.card').remove()
 
     })
 
   };
-  // $(this).parent().remove().slideToggle();
-
-
-
-  // $('.list').dialog({
-  //   autoOpen: false,
-  //   show: {
-  //     effect: "blind",
-  //     duration: 300
-  //   },
-  //   hide: {
-  //     effect: "explode",
-  //     duration: 1200
-  //   },
-
-  // $( function() {
-  //   // run the currently selected effect
-  //   function runEffect() {
-  //     // get effect type from
-  //     var selectedEffect = $( "#effectTypes" ).val();
-
-  //     // Most effect types need no options passed by default
-  //     var options = {};
-  //     // some effects have required parameters
-  //     if ( selectedEffect === "scale" ) {
-  //       options = { percent: 50 };
-  //     } else if ( selectedEffect === "transfer" ) {
-  //       options = { to: "#button", className: "ui-effects-transfer" };
-  //     } else if ( selectedEffect === "size" ) {
-  //       options = { to: { width: 200, height: 60 } };
-  //     }
-
-  //     // Run the effect
-  //     $( ".card" ).effect( selectedEffect, options, 500, callback );
-  //   };
-  // 
-  // function datepicker() {
-  //   $(".datepicker").datepicker('option', 'all')
-  // };
 
   function datepicker() {
     $(".datepicker").datepicker();
@@ -203,6 +176,8 @@ const jtrello = (function ($, dialog, tabs, sortable, datepicker, slideToggle) {
     bindEvents();
     createSortable();
     datepicker();
+    // createList();
+    // toggleDialog();
   }
 
   // All kod här

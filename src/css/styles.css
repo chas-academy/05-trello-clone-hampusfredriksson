@@ -49,7 +49,7 @@ input {
 .column {
   width: 270px;
   margin: 0 5px;
-  height: 400px;
+  height: 200px;
   box-sizing: border-box;
   display: inline-block;
   vertical-align: top;
