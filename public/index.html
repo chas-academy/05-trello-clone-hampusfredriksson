@@ -7,16 +7,17 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <title>jQuery UI - Trello Clone (yay!)</title>
-</head>
-
+<link href="./css/index.a0eae838ab8ca26a2cb2.css" rel="stylesheet"></head>
 
 <body>
-    <button class="changeBackground">HEJ</button>
     <div class="board">
+            <div class="widgets">
+                    <button id="new-list" class="button newList">Add new list</button>
+                    <button id="color" class="button bgColor">Change Background</button>
+                </div>
         <div class="column">
             <div class="list">
                 <div class="list-header">
-                    <p>Date: <input type="text" class="datepicker"></p>
                     Todo
                     <button class="button delete">X</button>
                 </div>
@@ -38,7 +39,6 @@
             <div class="list">
 
                 <div class="list-header">
-                    <p>Date: <input type="text" class="datepicker"></p>
                     Doing
                     <button class="button delete">X</button>
                 </div>
@@ -60,7 +60,6 @@
             <div class="list">
 
                 <div class="list-header">
-                    <p>Date: <input type="text" class="datepicker"></p>
                     Done
                     <button class="button delete">X</button>
                 </div>
@@ -79,33 +78,22 @@
             </div>
         </div>
         <div class="column">
-            <button id="new-list" class="button">Add new list</button>
         </div>
     </div>
 
-    <div id="list-creation-dialog" title="Create new list" style="height: 40px">
-        <form>
-            <input type="text" name="title" placeholder="List title" />
-            <button class="button">Save</button>
-        </form>
+    <div class="dialog" id="list-creation-dialog">
+        <div id="tabs-1">
+            <ul>
+                <form class="dialog-form">
+                    <li><a href="#fragment-1">Title🦄</a></li>
+                    <input type="text" placeholder="List name" name="list-title" class="listvalue" />
+                    <li><a href="#fragment-2">Due Date🍻</a></li>
+                    <div id="tabs-2"><input type="text" name="date" class="datepicker"></p>
+                        <button class="button-new">Save</button>
+                </form>
+            </ul>
+        </div>
     </div>
-
-    <div id="tabs">
-        <ul>
-            <li><a href="#fragment-1">🦄</a></li>
-            <li><a href="#fragment-2">🍻</a></li>
-            <li><a href="#fragment-3">🧐</a></li>
-        </ul>
-        <div id="fragment-1">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci placeat nam quos illum vero blanditiis?
-        </div>
-        <div id="fragment-2">
-            Lorem ipsum dolor sit amet.
-        </div>
-        <div id="fragment-3">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Maiores nesciunt maxime fuga beatae? Molestiae
-            dolorem culpa consectetur eligendi maxime adipisci.
-        </div>
     </div>
 <script type="text/javascript" src="./bundle.js"></script></body>
 
